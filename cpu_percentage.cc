@@ -3,7 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <sys/time.h>
-
+#include <xlocale.h>
 using namespace std;
 
 int measure_usec_diff(struct timeval* t1, struct timeval* t2)
@@ -29,44 +29,30 @@ void make_it_sleep(int sleep_time)
     usleep(sleep_time); 
 }
 
-// bool isNumber(string s)
-// {
-//     for (int i = 0; i < s.length(); i++) {
-//          if (isdigit(s[i]) == false) {
-//               return false; 
-//          }
-//          else {
-//               return true; 
-//          }    
-//     } 
-// }
+bool isNumber(string s)
+{
+    for (int i = 0; i < s.length(); i++) {
+         if (isdigit(s[i]) == false) {
+              return false; 
+         }
+         else {
+              return true; 
+         }    
+    } 
+}
 
 int main(int argc, char** argv)
 {
-    int percentage;
-    string user_defined_percentage;
     if (argc == 1) {
         printf("Usage: ./cpu_percentage <percentage> ");
           return -1;
     }
-  
 
-    try {
-        user_defined_percentage = argv[1]; 
-        percentage = stoi(user_defined_percentage);
-        
-         if(percentage <= 0 || percentage > 100)
-         {
-             printf("The number is too large or too small");
-             return 1;
-         }
-    }
-    catch(const std::invalid_argument& ia){
-        printf("The input needs to be a number");
-        return -1;
-    }
-    
-    
+    if (isNumber(argv[1]))
+    {
+        string user_defined_percentage = argv[1];  
+        int percentage = stoi(user_defined_percentage);
+
         float time_diff; 
         struct timeval tval1, tval2;
         float t1, t2; 
@@ -76,6 +62,7 @@ int main(int argc, char** argv)
             while(1){
                 gettimeofday(&tval2, NULL);
                 time_diff = measure_usec_diff(&tval1, &tval2);
+
                 if(time_diff > TIME_DELAY_CONSTANT)
                     break;
                 }
@@ -83,6 +70,12 @@ int main(int argc, char** argv)
             float sleep_time = calc_effective_sleep_time(time_diff, percentage);
             make_it_sleep(sleep_time);
         }
+        
+    }
+    else
+    {
+        printf("This is an error because you didn't enter a number ");
+    }
    
 }
 
