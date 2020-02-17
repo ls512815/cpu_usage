@@ -3,7 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <xlocale.h>
+
 using namespace std;
 
 int measure_usec_diff(struct timeval* t1, struct timeval* t2)
